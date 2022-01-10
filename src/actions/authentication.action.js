@@ -1,6 +1,7 @@
-import { fetchUserDetailsApi } from '../api/authentication.api';
+import { fetchUserDetailsApi, refreshUserDetailsApi } from '../api/authentication.api';
 import { authenticationActions } from '../store/authentication-slice';
 import { message } from 'antd';
+import { history } from '../constants';
 
 export const fetchUserDetails = (payload) => async (dispatch) => {
 	try {
@@ -20,6 +21,27 @@ export const fetchUserDetails = (payload) => async (dispatch) => {
 			message.success('Login successful!');
 		} else {
 			message.error('Invalid credentials!');
+		}
+	} catch (error) {
+		message.error('Something went wrong!');
+		console.log(`CATCH: ${ error }`);
+	}
+};
+
+export const refreshUserDetails = (payload) => async (dispatch) => {
+	try {
+		const response = await refreshUserDetailsApi(payload);
+
+		const data = await response.json();
+
+		if (data.length) {
+			dispatch(authenticationActions.login({
+				isDoctor: payload.role === 'doctors',
+				userData: data.find((item, index) => index === 0)
+			}));
+		} else {
+			dispatch(authenticationActions.logout({}));
+			history.replace('/');
 		}
 	} catch (error) {
 		message.error('Something went wrong!');
