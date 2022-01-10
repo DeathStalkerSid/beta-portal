@@ -1,4 +1,4 @@
-import { fetchUserDetailsApi, refreshUserDetailsApi } from '../api/authentication.api';
+import { editProfileApi, fetchUserDetailsApi, refreshUserDetailsApi } from '../api/authentication.api';
 import { authenticationActions } from '../store/authentication-slice';
 import { message } from 'antd';
 import { history } from '../constants';
@@ -54,6 +54,27 @@ export const clearUserDetails = () => async (dispatch) => {
 		dispatch(authenticationActions.logout({}));
 
 		message.success('Logout successful!');
+	} catch (error) {
+		message.error('Something went wrong!');
+		console.log(`CATCH: ${ error }`);
+	}
+};
+
+export const editProfile = (id, data) => async (dispatch) => {
+	try {
+		const response = await editProfileApi(id, data);
+
+		const userData = await response.json();
+
+		if (typeof userData === 'object') {
+			dispatch(authenticationActions.setProfile({
+				userData
+			}));
+
+			message.success('Update successful!');
+		} else {
+			message.error('User not found!');
+		}
 	} catch (error) {
 		message.error('Something went wrong!');
 		console.log(`CATCH: ${ error }`);
