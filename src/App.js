@@ -1,9 +1,10 @@
+import Router from './Router';
 import LayoutHeader from './components/LayoutHeader';
 import LayoutFooter from './components/LayoutFooter';
-import { Content } from 'antd/es/layout/layout';
-import Router from './Router';
+import { Layout } from 'antd';
 
 const App = () => {
+	const { Content } = Layout;
 	return (
 		<div className="App">
 			<LayoutHeader />
