@@ -4,10 +4,10 @@ import { Layout, Menu } from 'antd';
 import { LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { patientActions } from '../store/patient-slice';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 
 import classes from './Layout.module.css';
-import { clearUserDetails } from '../actions/authentication.action';
+import { clearUserDetails, refreshUserDetails } from '../actions/authentication.action';
 
 const { Header } = Layout;
 
@@ -17,6 +17,14 @@ const LayoutHeader = () => {
 	const navigate = useNavigate();
 	const isAuthenticated = useSelector(({ auth }) => auth.isAuthenticated);
 	const isDoctor = useSelector(({ auth }) => auth.isDoctor);
+	useEffect(() => {
+		const authId = localStorage.getItem('authId');
+		const role = localStorage.getItem('isDoctor') === '1' ? 'doctors' : 'patients';
+
+		if (authId) {
+			dispatch(refreshUserDetails({ role, authId }));
+		}
+	}, [dispatch]);
 
 	if (pathname.includes('/doctor/patients')) {
 		pathname = '/doctor/patients';
