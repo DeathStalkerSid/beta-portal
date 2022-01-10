@@ -16,12 +16,18 @@ export const fetchUserDetails = (payload) => async (dispatch) => {
 					isDoctor: payload.role === 'doctors',
 					userData
 				}));
-			}
 
-			message.success('Login successful!');
+				message.success('Login successful!');
+
+				return true;
+			} else {
+				message.error('Invalid credentials!');
+			}
 		} else {
 			message.error('Invalid credentials!');
 		}
+
+		return false;
 	} catch (error) {
 		message.error('Something went wrong!');
 		console.log(`CATCH: ${ error }`);
