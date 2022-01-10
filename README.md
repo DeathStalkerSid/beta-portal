@@ -24,5 +24,9 @@ Possible Errors (or unwanted situations):
 1. Console error: `unique key error` when viewing the patient list, does not happen all the time.
 2. Diagnoses, and Prescribed Medications are supposed to be required, however was unable to pass the test for some reason, so they are not mandatory for now (*Good news for the patient though, they can now be free of a disease*).
 
+
+Note:
+The API used for backend (https://mockapi.io) is not designed for authentication, or even SQL queries, so a lot of the logic that should be done on the backend had to be done in the frontend here (in the action thunks and so on); all that code will not be required when there is an actual backend present.
+
 Thank you!
 
