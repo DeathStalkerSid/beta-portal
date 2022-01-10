@@ -108,6 +108,40 @@ describe('login test suite', () => {
 		await waitFor(() => expect(calls).toHaveLength(0));
 	});
 
+	test('invalid credentials with correct email', async () => {
+		const mockDispatch = jest.fn(() => Promise.resolve());
+		useDispatchMock.mockReturnValue(mockDispatch);
+		render(<BrowserRouter><Login /></BrowserRouter>);
+
+		const emailInputEl = await screen.findByRole('textbox', { name: 'Email' });
+		fireEvent.change(emailInputEl, { target: { value: 'doctor@hotmail.com' } });
+
+		const passwordInputEl = await screen.findByLabelText('Password', { selector: 'input' });
+		fireEvent.change(passwordInputEl, { target: { value: 'password' } });
+
+		const form = await screen.findByRole('form', {});
+		fireEvent.submit(form);
+
+		const dispatch = jest.fn();
+		const thunk = fetchUserDetails({
+			email: 'doctor@hotmail.com',
+			password: 'wrong',
+			role: 'doctors'
+		});
+		await thunk(dispatch, () => (
+			{
+				isAuthenticated: false,
+				isDoctor: false,
+				userId: null,
+				userData: null
+			}
+		), undefined);
+
+		const { calls } = dispatch.mock;
+
+		await waitFor(() => expect(calls).toHaveLength(0));
+	});
+
 	test('invalid data', async () => {
 		const mockDispatch = jest.fn(() => Promise.resolve());
 		useDispatchMock.mockReturnValue(mockDispatch);

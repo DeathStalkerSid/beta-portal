@@ -9,7 +9,7 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const onFinish = (data) => dispatch(fetchUserDetails(data)).then(() => navigate('/'));
+	const onFinish = (data) => dispatch(fetchUserDetails(data)).then((response) => response && navigate('/'));
 
 	return <Fragment>
 		<Title style={ { textAlign: 'center' } }>{ 'Login' }</Title>
